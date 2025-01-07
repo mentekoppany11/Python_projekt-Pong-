@@ -1,8 +1,6 @@
 import pygame
 from sys import exit
 
-
-
 pygame.init()
 
 screen = pygame.display.set_mode((1000, 600))
@@ -13,20 +11,13 @@ pygame.display.set_icon(icon_surf)
 
 clock = pygame.time.Clock()
 
-
-
 font = pygame.font.Font('game_font.ttf')
-
 
 GRAY       = (128, 128, 128)
 LIGHT_GRAY = (64,64,64)
 BLUE       = (0, 0, 255)
 RED        = (255, 0, 0)
 ORANGE     = (255, 165, 0)
-
-
-
-
 
 player1_surf = pygame.Surface((30, 200))
 player1_surf.fill(RED)
@@ -75,7 +66,7 @@ while True:
 
         if keys[pygame.K_UP] and player2_rect.top > 0:
             player2_rect.y -= 5
-            
+
         if keys[pygame.K_DOWN] and player2_rect.bottom < 600:
             player2_rect.y += 5
 
