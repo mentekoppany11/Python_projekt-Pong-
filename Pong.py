@@ -74,12 +74,17 @@ while True:
         ball_rect.y += ball_speed_y
 
         if ball_rect.top <= 0 or ball_rect.bottom >= 600:
-            ball_speed_y *= -1
+            ball_speed_y *= -1.05
+            ball_speed_x *= 1.05
+            print(ball_speed_x, ball_speed_y)
 
         if ball_rect.left >= 1015:
+            ball_speed_x = 6
+            ball_speed_y = 6
         #Labda sebességének a növelése
             ball_speed_x *= -1.05 #labda irányának a meg fordítása
             ball_speed_y *= 1.05
+            print(ball_speed_x, ball_speed_y)
         #Labda visszahelyezése középre
             ball_rect.x = 500
             ball_rect.y = 300
@@ -90,9 +95,12 @@ while True:
             screen.blit(score_surf, score_rect)
 
         if ball_rect.right <= -15:
+            ball_speed_x = 6
+            ball_speed_y = 6
         #Labda sebességének a növelése
             ball_speed_x *= -1.05 #labda irányának a meg fordítása
             ball_speed_y *= 1.05
+            print(ball_speed_x, ball_speed_y)
         #Labda visszahelyezése középre
             ball_rect.x = 500
             ball_rect.y = 300
