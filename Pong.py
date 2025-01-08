@@ -13,6 +13,8 @@ RED        = (255,   0,   0)
 ORANGE     = (255, 165,   0)
 BLACK      = (  0,   0,   0)
 WHITE      = (255, 255, 255)
+GREEN      = (  0, 255,   0)
+DARK_GREEN = (  0, 120,   0)
 
 pygame.display.set_caption("Pong")
 try:
@@ -54,11 +56,11 @@ def countdown(seconds):
 
         screen.fill(GRAY)
 
-        score_surf = font.render(f"Player1 {player1_score}:{player2_score} Player2", False, LIGHT_GRAY, GRAY)
+        score_surf = font.render(f"Player1 {player1_score}:{player2_score} Player2", False, BLACK, GRAY)
         score_rect = score_surf.get_rect(midtop = (500, 25))
         screen.blit(score_surf, score_rect)
 
-        countdown_surf = font.render(f"Következő kör kezdődik: {count}", False, LIGHT_GRAY, GRAY)
+        countdown_surf = font.render(f"Következő kör kezdődik: {count}", False, BLACK, GRAY)
         countdown_rect = countdown_surf.get_rect(center = (500, 300))
         screen.blit(countdown_surf, countdown_rect)
 
@@ -67,10 +69,13 @@ def countdown(seconds):
 
 def name_input():
 
-    input_active = True
+    active = True
 
     input_box_p1 = pygame.Rect(30, 50, 200, 30)
     input_box_p2 = pygame.Rect(770, 50, 200, 30)
+
+    submit_box = pygame.Rect(425, 510, 150, 40)
+    submit_box_hover = False
     
     input_text_p1 = ""
     input_text_p2 = ""
@@ -78,7 +83,17 @@ def name_input():
     active_p1 = False
     active_p2 = False
 
-    while input_active:
+    submit_surf = font.render("SUBMIT", True, BLACK)
+    submit_rect = submit_surf.get_rect(center = (500, 530))
+    submit_draw = pygame.draw.rect(screen, DARK_GREEN, submit_box)
+
+    player1_name_surf = font.render("PLAYER 1", True, BLACK)
+    player1_name_rect = player1_name_surf.get_rect(topleft = (30, 30))
+
+    player2_name_surf = font.render("PLAYER 2", True, BLACK)
+    player2_name_rect = player2_name_surf.get_rect(topright = (970, 30))
+
+    while active:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -96,39 +111,46 @@ def name_input():
                     active_p2 = False
 
             if event.type == pygame.KEYDOWN and len(input_text_p1) <= 14 and active_p1:
-                if event.key == pygame.K_RETURN:
-                    input_active = False
-                elif event.key == pygame.K_BACKSPACE:
+                if event.key == pygame.K_BACKSPACE:
                     input_text_p1 = input_text_p1[:-1]
                 else:
                     input_text_p1 += event.unicode
                     
             if event.type == pygame.KEYDOWN and len(input_text_p2) <= 14 and active_p2:
-                if event.key == pygame.K_RETURN:
-                    input_active = False
-                elif event.key == pygame.K_BACKSPACE:
+                if event.key == pygame.K_BACKSPACE:
                     input_text_p2 = input_text_p2[:-1]
                 else:
                     input_text_p2 += event.unicode
+            
+            if event.type == pygame.MOUSEMOTION:
+                if submit_draw.collidepoint(event.pos) or submit_rect.collidepoint(event.pos):
+                    submit_box_hover = True 
+                else:
+                    submit_box_hover = False
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if submit_draw.collidepoint(event.pos) or submit_rect.collidepoint(event.pos):
+                    active = False
 
         screen.fill(GRAY)
 
-        player1_name_surf = font.render("PLAYER 1", True, LIGHT_GRAY)
-        player1_name_rect = player1_name_surf.get_rect(topleft = (30, 30))
         screen.blit(player1_name_surf, player1_name_rect)
-
-        player2_name_surf = font.render("PLAYER 2", True, LIGHT_GRAY)
-        player2_name_rect = player2_name_surf.get_rect(topright = (970, 30))
         screen.blit(player2_name_surf, player2_name_rect)
 
         pygame.draw.rect(screen, WHITE, input_box_p1)
         pygame.draw.rect(screen, BLACK, input_box_p1, 3)
 
         pygame.draw.rect(screen, WHITE, input_box_p2)
-        pygame.draw.rect(screen, BLACK, input_box_p2, 3)      
+        pygame.draw.rect(screen, BLACK, input_box_p2, 3)  
+        
+        pygame.draw.rect(screen, DARK_GREEN, submit_box)
+        pygame.draw.rect(screen, BLACK, submit_box, 3)
+
+        screen.blit(submit_surf, submit_rect)
+        
 
         if active_p1:
-            pygame.draw.rect(screen, (0, 255, 0), input_box_p1, 3)
+            pygame.draw.rect(screen, GREEN, input_box_p1, 3)
             text_surf_p1 = font.render(input_text_p1, True, BLUE)
             screen.blit(text_surf_p1, (input_box_p1.x + 10, input_box_p1.y + 10))
         else:
@@ -137,14 +159,18 @@ def name_input():
             screen.blit(text_surf_p1, (input_box_p1.x + 10, input_box_p1.y + 10))
 
         if active_p2:
-            pygame.draw.rect(screen, (0, 255, 0), input_box_p2, 3)
+            pygame.draw.rect(screen, GREEN, input_box_p2, 3)
             text_surf_p2 = font.render(input_text_p2, True, BLUE)
             screen.blit(text_surf_p2, (input_box_p2.x + 10, input_box_p2.y + 10))
         else:
             pygame.draw.rect(screen, BLACK, input_box_p2, 3)
             text_surf_p2 = font.render(input_text_p2, True, BLUE)
             screen.blit(text_surf_p2, (input_box_p2.x + 10, input_box_p2.y + 10))
-
+        
+        if submit_box_hover:
+            pygame.draw.rect(screen, GREEN, submit_box)
+            pygame.draw.rect(screen, BLACK, submit_box, 3)
+            screen.blit(submit_surf, submit_rect)
 
         pygame.display.update()
         clock.tick(60)
@@ -160,11 +186,9 @@ while True:
                 pygame.quit()
                 exit()
         
-        
-        
         screen.fill(GRAY)
 
-        score_surf = font.render(f"{player1_name} {player1_score}:{player2_score} {player2_name}", True, LIGHT_GRAY, GRAY)
+        score_surf = font.render(f"{player1_name} {player1_score}:{player2_score} {player2_name}", True, BLACK, GRAY)
         score_rect = score_surf.get_rect(midtop = (500, 25))
 
         screen.blit(player1_surf, player1_rect)
