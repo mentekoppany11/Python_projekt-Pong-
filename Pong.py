@@ -1,21 +1,23 @@
 import pygame
 from random import choice
 from sys import exit
-from time import sleep
+import time
 
 pygame.init()
 
 screen = pygame.display.set_mode((1000, 600))
 
 GRAY       = (128, 128, 128)
-LIGHT_GRAY = ( 64,  64,  64)
-BLUE       = (  0,   0, 255)
 RED        = (255,   0,   0)
-ORANGE     = (255, 165,   0)
-BLACK      = (  0,   0,   0)
-WHITE      = (255, 255, 255)
-GREEN      = (  0, 255,   0)
 DARK_GREEN = (  0, 120,   0)
+BLUE       = (  0,   0, 255)
+YELLOW     = (255, 255,   0)
+PURPLE     = (150,   0, 255)
+LIGHT_GRAY = ( 64,  64,  64)
+ORANGE     = (255, 165,   0)
+GREEN      = (  0, 255,   0)
+WHITE      = (255, 255, 255)
+BLACK      = (  0,   0,   0)
 
 pygame.display.set_caption("Pong")
 try:
@@ -32,32 +34,18 @@ pygame.display.set_icon(icon_surf)
 
 clock = pygame.time.Clock()
 
-player1_surf = pygame.Surface((30, 200))
-player1_surf.fill(RED)
-player1_rect = player1_surf.get_rect(midleft = (50, 300))
-
-player2_surf = pygame.Surface((30, 200))
-player2_surf.fill(BLUE)
-player2_rect  = player2_surf.get_rect(midright = (950, 300))
-
 ball_surf = pygame.Surface((20, 20))
 ball_surf.fill(ORANGE)
 ball_rect = ball_surf.get_rect(center = (500, 300))
 
-ball_speed_x = choice([6, -6])
-ball_speed_y = choice([6, -6])
+ball_speed_x = choice([5, -5])
+ball_speed_y = choice([5, -5])
 max_speed = 10
 
 player1_score = 0
 player2_score = 0
 
 def home():
-
-    binds_box = pygame.Rect(400, 360, 200, 40)
-    binds_surf = font.render("BINDS", True, BLACK)
-    binds_rect = binds_surf.get_rect(center = (500, 380))
-    binds_draw = pygame.draw.rect(screen, WHITE, binds_box)
-    binds_draw_hover = False
 
     multiplayer_box = pygame.Rect(400, 260, 200, 40)
     multiplayer_surf = font.render("2 PLAYER MODE", True, BLACK)
@@ -73,8 +61,14 @@ def home():
     solo_draw_hover = False
     solo_active = False
 
+    binds_box = pygame.Rect(400, 360, 200, 40)
+    binds_surf = font.render("OPTIONS", True, BLACK)
+    binds_rect = binds_surf.get_rect(center = (500, 380))
+    binds_draw = pygame.draw.rect(screen, WHITE, binds_box)
+    binds_draw_hover = False
+
     title_font = pygame.font.Font("game_font.ttf", 35)
-    title_surf = title_font.render("(PING-) PONG ARCADE GAME",True, BLACK)
+    title_surf = title_font.render("PONG ARCADE GAME",True, BLACK)
     title_rect = title_surf.get_rect(center = (500, 100))
 
     while solo_active == False and multiplayer_active == False:
@@ -155,7 +149,7 @@ def countdown(seconds):
         screen.blit(countdown_surf, countdown_rect)
 
         pygame.display.update()
-        sleep(1)
+        time.sleep(1)
 
     screen.fill(GRAY)
 
@@ -164,7 +158,7 @@ def countdown(seconds):
     screen.blit(countdown_surf, countdown_rect)
 
     pygame.display.update()
-    sleep(1)
+    time.sleep(1)
 
 def name_input():
 
@@ -192,6 +186,39 @@ def name_input():
     player2_name_surf = font.render("PLAYER 2", True, BLACK)
     player2_name_rect = player2_name_surf.get_rect(topright = (970, 30))
 
+    color_p1 = BLACK
+    color_p2 = BLACK
+
+    color_box_red_p1 = pygame.Rect(input_box_p1.left, input_box_p1.bottom + 10, 32, 32)
+    color_box_red_active_p1 = True
+
+    color_box_red_p2 = pygame.Rect(input_box_p2.left, input_box_p1.bottom + 10, 32, 32)
+    color_box_red_active_p2 = False
+
+    color_box_green_p1 = pygame.Rect(input_box_p1.left + 42, input_box_p1.bottom + 10, 32, 32)
+    color_box_green_active_p1 = False
+
+    color_box_green_p2 = pygame.Rect(input_box_p2.left + 42, input_box_p1.bottom + 10, 32, 32)
+    color_box_green_active_p2 = True
+
+    color_box_blue_p1 = pygame.Rect(input_box_p1.left + 84, input_box_p1.bottom + 10, 32, 32)
+    color_box_blue_active_p1 = False
+
+    color_box_blue_p2 = pygame.Rect(input_box_p2.left + 84, input_box_p1.bottom + 10, 32, 32)
+    color_box_blue_active_p2 = False
+
+    color_box_yellow_p1 = pygame.Rect(input_box_p1.left + 126, input_box_p1.bottom + 10, 32, 32)
+    color_box_yellow_active_p1 = False
+
+    color_box_yellow_p2 = pygame.Rect(input_box_p2.left + 126, input_box_p1.bottom + 10, 32, 32)
+    color_box_yellow_active_p2 = False
+
+    color_box_purple_p1 = pygame.Rect(input_box_p1.left + 168, input_box_p1.bottom + 10, 32, 32)
+    color_box_purple_active_p1 = False
+
+    color_box_purple_p2 = pygame.Rect(input_box_p2.left + 168, input_box_p1.bottom + 10, 32, 32)
+    color_box_purple_active_p2 = False
+
     while active:
         
         for event in pygame.event.get():
@@ -202,13 +229,33 @@ def name_input():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if input_box_p1.collidepoint(event.pos):
                     active_p1 = not active_p1
-                else:
-                    active_p1 = False
+                    active_p2 = False
 
                 if input_box_p2.collidepoint(event.pos):
                     active_p2 = not active_p2
-                else:
-                    active_p2 = False
+                    active_p1 = False
+
+                if color_box_red_p1.collidepoint(event.pos):
+                    color_p1 = RED
+                elif color_box_green_p1.collidepoint(event.pos):
+                    color_p1 = DARK_GREEN
+                elif color_box_blue_p1.collidepoint(event.pos):
+                    color_p1 = BLUE
+                elif color_box_yellow_p1.collidepoint(event.pos):
+                    color_p1 = YELLOW
+                elif color_box_purple_p1.collidepoint(event.pos):
+                    color_p1 = PURPLE
+
+                if color_box_red_p2.collidepoint(event.pos):
+                    color_p2 = RED
+                elif color_box_green_p2.collidepoint(event.pos):
+                    color_p2 = DARK_GREEN
+                elif color_box_blue_p2.collidepoint(event.pos):
+                    color_p2 = BLUE
+                elif color_box_yellow_p2.collidepoint(event.pos):
+                    color_p2 = YELLOW
+                elif color_box_purple_p2.collidepoint(event.pos):
+                    color_p2 = PURPLE
 
             if event.type == pygame.KEYDOWN and len(input_text_p1) <= 14 and active_p1:
                 if event.key == pygame.K_BACKSPACE:
@@ -224,13 +271,83 @@ def name_input():
             
             if event.type == pygame.MOUSEMOTION:
                 if submit_draw.collidepoint(event.pos) or submit_rect.collidepoint(event.pos):
-                    submit_box_hover = True 
+                    submit_box_hover = True
                 else:
-                    submit_box_hover = False
-            
+                    submit_box_hover = False 
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if submit_draw.collidepoint(event.pos) or submit_rect.collidepoint(event.pos):
                     active = False
+
+                if color_box_red_p1.collidepoint(event.pos):
+                    color_box_red_active_p1 = not color_box_red_active_p1
+                    color_box_green_active_p1 = False
+                    color_box_blue_active_p1 = False
+                    color_box_yellow_active_p1 = False
+                    color_box_purple_active_p1 = False
+
+                if color_box_green_p1.collidepoint(event.pos):
+                    color_box_green_active_p1 = not color_box_green_active_p1
+                    color_box_red_active_p1 = False
+                    color_box_blue_active_p1 = False
+                    color_box_yellow_active_p1 = False
+                    color_box_purple_active_p1 = False
+
+                if color_box_blue_p1.collidepoint(event.pos):
+                    color_box_blue_active_p1 = not color_box_blue_active_p1
+                    color_box_red_active_p1 = False
+                    color_box_green_active_p1 = False
+                    color_box_yellow_active_p1 = False
+                    color_box_purple_active_p1 = False
+
+                if color_box_yellow_p1.collidepoint(event.pos):
+                    color_box_yellow_active_p1 = not color_box_yellow_active_p1
+                    color_box_red_active_p1 = False
+                    color_box_green_active_p1 = False
+                    color_box_blue_active_p1 = False
+                    color_box_purple_active_p1 = False
+
+                if color_box_purple_p1.collidepoint(event.pos):
+                    color_box_purple_active_p1 = not color_box_purple_active_p1
+                    color_box_red_active_p1 = False
+                    color_box_green_active_p1 = False
+                    color_box_blue_active_p1 = False
+                    color_box_yellow_active_p1 = False
+
+                if color_box_red_p2.collidepoint(event.pos):
+                    color_box_red_active_p2 = not color_box_red_active_p2
+                    color_box_green_active_p2 = False
+                    color_box_blue_active_p2 = False
+                    color_box_purple_active_p2 = False
+                    color_box_yellow_active_p2 = False
+
+                if color_box_green_p2.collidepoint(event.pos):
+                    color_box_green_active_p2 = not color_box_green_active_p2
+                    color_box_red_active_p2 = False
+                    color_box_blue_active_p2 = False
+                    color_box_purple_active_p2 = False
+                    color_box_yellow_active_p2 = False
+
+                if color_box_blue_p2.collidepoint(event.pos):
+                    color_box_blue_active_p2 = not color_box_blue_active_p2
+                    color_box_red_active_p2 = False
+                    color_box_green_active_p2 = False
+                    color_box_purple_active_p2 = False
+                    color_box_yellow_active_p2 = False
+
+                if color_box_yellow_p2.collidepoint(event.pos):
+                    color_box_yellow_active_p2 = not color_box_yellow_active_p2
+                    color_box_red_active_p2 = False
+                    color_box_green_active_p2 = False
+                    color_box_blue_active_p2 = False
+                    color_box_purple_active_p2 = False
+
+                if color_box_purple_p2.collidepoint(event.pos):
+                    color_box_purple_active_p2 = not color_box_purple_active_p2
+                    color_box_red_active_p2 = False
+                    color_box_green_active_p2 = False
+                    color_box_blue_active_p2 = False
+                    color_box_yellow_active_p2 = False
 
         screen.fill(GRAY)
 
@@ -239,6 +356,36 @@ def name_input():
 
         pygame.draw.rect(screen, WHITE, input_box_p1)
         pygame.draw.rect(screen, BLACK, input_box_p1, 3)
+
+        pygame.draw.rect(screen, RED, color_box_red_p1)
+        pygame.draw.rect(screen, BLACK, color_box_red_p1, 3)
+
+        pygame.draw.rect(screen, DARK_GREEN, color_box_green_p1)
+        pygame.draw.rect(screen, BLACK, color_box_green_p1, 3)
+
+        pygame.draw.rect(screen, BLUE, color_box_blue_p1)
+        pygame.draw.rect(screen, BLACK, color_box_blue_p1, 3)
+
+        pygame.draw.rect(screen, YELLOW, color_box_yellow_p1)
+        pygame.draw.rect(screen, BLACK, color_box_yellow_p1, 3)
+
+        pygame.draw.rect(screen, PURPLE, color_box_purple_p1)
+        pygame.draw.rect(screen, BLACK, color_box_purple_p1, 3)
+
+        pygame.draw.rect(screen, RED, color_box_red_p2)
+        pygame.draw.rect(screen, BLACK, color_box_red_p2, 3)
+
+        pygame.draw.rect(screen, DARK_GREEN, color_box_green_p2)
+        pygame.draw.rect(screen, BLACK, color_box_green_p2, 3)
+
+        pygame.draw.rect(screen, BLUE, color_box_blue_p2)
+        pygame.draw.rect(screen, BLACK, color_box_blue_p2, 3)
+
+        pygame.draw.rect(screen, YELLOW, color_box_yellow_p2)
+        pygame.draw.rect(screen, BLACK, color_box_yellow_p2, 3)
+
+        pygame.draw.rect(screen, PURPLE, color_box_purple_p2)
+        pygame.draw.rect(screen, BLACK, color_box_purple_p2, 3)
 
         pygame.draw.rect(screen, WHITE, input_box_p2)
         pygame.draw.rect(screen, BLACK, input_box_p2, 3)  
@@ -271,6 +418,46 @@ def name_input():
             pygame.draw.rect(screen, BLACK, submit_box, 3)
             screen.blit(submit_surf, submit_rect)
 
+        if color_box_red_active_p1:
+            pygame.draw.rect(screen, RED, color_box_red_p1)
+            pygame.draw.rect(screen, GREEN, color_box_red_p1, 3)
+        
+        if color_box_red_active_p2:
+            pygame.draw.rect(screen, RED, color_box_red_p2)
+            pygame.draw.rect(screen, GREEN, color_box_red_p2, 3)
+
+        if color_box_green_active_p1:
+            pygame.draw.rect(screen, DARK_GREEN, color_box_green_p1)
+            pygame.draw.rect(screen, GREEN, color_box_green_p1, 3)
+
+        if color_box_green_active_p2:
+            pygame.draw.rect(screen, DARK_GREEN, color_box_green_p2)
+            pygame.draw.rect(screen, GREEN, color_box_green_p2, 3)
+
+        if color_box_blue_active_p1:
+            pygame.draw.rect(screen, BLUE, color_box_blue_p1)
+            pygame.draw.rect(screen, GREEN, color_box_blue_p1, 3)
+
+        if color_box_blue_active_p2:
+            pygame.draw.rect(screen, BLUE, color_box_blue_p2)
+            pygame.draw.rect(screen, GREEN, color_box_blue_p2, 3)
+
+        if color_box_yellow_active_p1:
+            pygame.draw.rect(screen, YELLOW, color_box_yellow_p1)
+            pygame.draw.rect(screen, GREEN, color_box_yellow_p1, 3)
+
+        if color_box_yellow_active_p2:
+            pygame.draw.rect(screen, YELLOW, color_box_yellow_p2)
+            pygame.draw.rect(screen, GREEN, color_box_yellow_p2, 3)
+
+        if color_box_purple_active_p1:
+            pygame.draw.rect(screen, PURPLE, color_box_purple_p1)
+            pygame.draw.rect(screen, GREEN, color_box_purple_p1, 3)
+
+        if color_box_purple_active_p2:
+            pygame.draw.rect(screen, PURPLE, color_box_purple_p2)
+            pygame.draw.rect(screen, GREEN, color_box_purple_p2, 3)
+
         pygame.display.update()
         clock.tick(60)
 
@@ -280,11 +467,21 @@ def name_input():
     if input_text_p2 == "":
         input_text_p2 = "PLAYER2"
 
-    return input_text_p1, input_text_p2
+    return input_text_p1, input_text_p2, color_p1, color_p2
 
 game_mode = home()
 
-player1_name, player2_name = name_input()
+player1_name, player2_name, color_p1, color_p2 = name_input()
+
+player1_surf = pygame.Surface((30, 200))
+player1_surf.fill(color_p1)
+player1_rect = player1_surf.get_rect(midleft = (50, 300))
+
+player2_surf = pygame.Surface((30, 200))
+player2_surf.fill(color_p2)
+player2_rect  = player2_surf.get_rect(midright = (950, 300))
+
+print(color_p1, color_p2)
 
 countdown(3)
 
@@ -331,36 +528,40 @@ while True:
         ball_rect.y += ball_speed_y
 
         if ball_rect.top <= 0 or ball_rect.bottom >= 600:
-            ball_speed_x = max(min(ball_speed_x *  1.05, max_speed), - max_speed)
-            ball_speed_y = max(min(ball_speed_y * -1.05, max_speed), - max_speed)
+            ball_speed_x = max(min(ball_speed_x *  1.01, max_speed), - max_speed)
+            ball_speed_y = max(min(ball_speed_y * -1.01, max_speed), - max_speed)
             print(ball_speed_x, ball_speed_y)
 
         if ball_rect.left >= 1000:
-            ball_speed_x = choice([6, -6])
-            ball_speed_y = choice([6, -6])
-        #Labda visszahelyezése középre
-            ball_rect.x, ball_rect.y = 500, 300
-        #Eredmény frissítése
+            ball_speed_x = choice([5, -5])
+            ball_speed_y = choice([5, -5])
+            ball_rect.x = 500
+            ball_rect.y = 300
+            player1_rect.x = 30
+            player1_rect.y = 200
+            player2_rect.x = 900
+            player2_rect.y = 200
             player1_score += 1
-        #Visszaszámláló
             if player1_score != 3:
                 countdown(3)
 
         if ball_rect.right <= 0:
-            ball_speed_x = choice([6, -6])
-            ball_speed_y = choice([6, -6])
-        #Labda visszahelyezése középre
-            ball_rect.x, ball_rect.y = 500, 300
-        #Eredmény frissítése
+            ball_speed_x = choice([5, -5])
+            ball_speed_y = choice([5, -5])
+            ball_rect.x = 500
+            ball_rect.y = 300
+            player1_rect.x = 30
+            player1_rect.y = 200
+            player2_rect.x = 900
+            player2_rect.y = 200
             player2_score += 1
-        #Visszaszámláló
             if player2_score != 3:
                 countdown(3)
-
-        if player1_rect.colliderect(ball_rect) or player2_rect.colliderect(ball_rect):
-            ball_speed_x = max(min(ball_speed_x * -1.05, max_speed), - max_speed)
-            ball_speed_y = max(min(ball_speed_y * 1.05, max_speed), - max_speed)
-            print(ball_speed_x, ball_speed_y)
+        
+        if player1_rect.collidepoint(ball_rect.midleft) or player2_rect.collidepoint(ball_rect.midright):
+                ball_speed_x = max(min(ball_speed_x * -1.01, max_speed), -max_speed)
+                ball_speed_y = max(min(ball_speed_y * 1.01, max_speed), -max_speed)
+                
 
         pygame.display.update()
         clock.tick(60)
