@@ -19,8 +19,8 @@ DARK_GREEN = (  0, 120,   0)
 
 pygame.display.set_caption("Pong")
 try:
-    icon_surf = pygame.image.load("Z:\\1_Python\\Python_projekt-Pong-\\icon.png")
-    font = pygame.font.Font("Z:\\1_Python\\Python_projekt-Pong-\\game_font.ttf")
+    icon_surf = pygame.image.load("icon.png")
+    font = pygame.font.Font("game_font.ttf")
 except FileNotFoundError as e:
     print(f"Fájl nem található/File not Found: {e}")
     font = pygame.font.Font(None, 30)
@@ -46,6 +46,7 @@ ball_rect = ball_surf.get_rect(center = (500, 300))
 
 ball_speed_x = choice([6, -6])
 ball_speed_y = choice([6, -6])
+max_speed = 10
 
 player1_score = 0
 player2_score = 0
@@ -72,7 +73,7 @@ def home():
     solo_draw_hover = False
     solo_active = False
 
-    title_font = pygame.font.Font("Z:\\1_Python\\Python_projekt-Pong-\\game_font.ttf", 35)
+    title_font = pygame.font.Font("game_font.ttf", 35)
     title_surf = title_font.render("(PING-) PONG ARCADE GAME",True, BLACK)
     title_rect = title_surf.get_rect(center = (500, 100))
 
@@ -139,7 +140,7 @@ def home():
 
 def countdown(seconds):
 
-    countdown_font = pygame.font.Font("Z:\\1_Python\\Python_projekt-Pong-\\game_font.ttf", 70)
+    countdown_font = pygame.font.Font("game_font.ttf", 70)
 
     for count in range(seconds, 0, -1):
 
@@ -273,6 +274,12 @@ def name_input():
         pygame.display.update()
         clock.tick(60)
 
+    if input_text_p1 == "":
+        input_text_p1 = "PLAYER1"
+
+    if input_text_p2 == "":
+        input_text_p2 = "PLAYER2"
+
     return input_text_p1, input_text_p2
 
 game_mode = home()
@@ -287,16 +294,12 @@ while True:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-        print(player2_rect)
+
         if game_mode:
-            if ball_rect.centery > player2_rect.centery:
+            if ball_rect.centery > player2_rect.centery and player2_rect.centery < 500:
                 player2_rect.y += 5
-                if player2_rect.y > 600:
-                    player2_rect.y = 600
-            elif ball_rect.centery < player2_rect.centery:
+            elif ball_rect.centery < player2_rect.centery and player2_rect.centery > 100:
                 player2_rect.y -= 5
-                if player2_rect.y < 0:
-                    player2_rect.y = 0
 
         screen.fill(GRAY)
 
@@ -312,24 +315,25 @@ while True:
 
         keys = pygame.key.get_pressed()
         
-        if keys[pygame.K_w] and player1_rect.top > 0:
+        if keys[pygame.K_w] and player1_rect.centery > 100:
             player1_rect.y -= 5
 
-        if keys[pygame.K_s] and player1_rect.bottom < 600:
+        if keys[pygame.K_s] and player1_rect.centery < 500:
             player1_rect.y += 5
 
-        if keys[pygame.K_UP] and player2_rect.top > 0:
+        if keys[pygame.K_UP] and player2_rect.centery > 100:
             player2_rect.y -= 5
 
-        if keys[pygame.K_DOWN] and player2_rect.bottom < 600:
+        if keys[pygame.K_DOWN] and player2_rect.centery < 500:
             player2_rect.y += 5
 
         ball_rect.x += ball_speed_x
         ball_rect.y += ball_speed_y
 
         if ball_rect.top <= 0 or ball_rect.bottom >= 600:
-            ball_speed_y *= -1.05
-            ball_speed_x *= 1.05
+            ball_speed_x = max(min(ball_speed_x *  1.05, max_speed), - max_speed)
+            ball_speed_y = max(min(ball_speed_y * -1.05, max_speed), - max_speed)
+            print(ball_speed_x, ball_speed_y)
 
         if ball_rect.left >= 1000:
             ball_speed_x = choice([6, -6])
@@ -354,14 +358,16 @@ while True:
                 countdown(3)
 
         if player1_rect.colliderect(ball_rect) or player2_rect.colliderect(ball_rect):
-            ball_speed_x *= -1.05
+            ball_speed_x = max(min(ball_speed_x * -1.05, max_speed), - max_speed)
+            ball_speed_y = max(min(ball_speed_y * 1.05, max_speed), - max_speed)
+            print(ball_speed_x, ball_speed_y)
 
         pygame.display.update()
         clock.tick(60)
 
     else:
 
-        winner_font = pygame.font.Font("Z:\\1_Python\\Python_projekt-Pong-\\game_font.ttf", 40)
+        winner_font = pygame.font.Font("game_font.ttf", 40)
 
         while True:
             for event in pygame.event.get():
