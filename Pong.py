@@ -50,6 +50,93 @@ ball_speed_y = choice([6, -6])
 player1_score = 0
 player2_score = 0
 
+def home():
+
+    binds_box = pygame.Rect(400, 360, 200, 40)
+    binds_surf = font.render("BINDS", True, BLACK)
+    binds_rect = binds_surf.get_rect(center = (500, 380))
+    binds_draw = pygame.draw.rect(screen, WHITE, binds_box)
+    binds_draw_hover = False
+
+    multiplayer_box = pygame.Rect(400, 260, 200, 40)
+    multiplayer_surf = font.render("2 PLAYER MODE", True, BLACK)
+    multiplayer_rect = multiplayer_surf.get_rect(center = (500, 280))
+    multiplayer_draw = pygame.draw.rect(screen, WHITE, multiplayer_box)
+    multiplayer_draw_hover = False
+    multiplayer_active = False
+
+    solo_box = pygame.Rect(400, 310, 200, 40)
+    solo_surf = font.render("1 PLAYER MODE", True, BLACK)
+    solo_rect = solo_surf.get_rect(center = (500, 330))
+    solo_draw = pygame.draw.rect(screen, WHITE, solo_box)
+    solo_draw_hover = False
+    solo_active = False
+
+    title_font = pygame.font.Font("Z:\\1_Python\\Python_projekt-Pong-\\game_font.ttf", 35)
+    title_surf = title_font.render("(PING-) PONG ARCADE GAME",True, BLACK)
+    title_rect = title_surf.get_rect(center = (500, 100))
+
+    while solo_active == False and multiplayer_active == False:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            
+            if event.type == pygame.MOUSEMOTION:
+                if multiplayer_draw.collidepoint(event.pos) or multiplayer_rect.collidepoint(event.pos):
+                    multiplayer_draw_hover = True
+                else:
+                    multiplayer_draw_hover = False
+                
+                if solo_draw.collidepoint(event.pos) or solo_rect.collidepoint(event.pos):
+                    solo_draw_hover = True
+                else:
+                    solo_draw_hover = False
+
+                if binds_draw.collidepoint(event.pos) or binds_rect.collidepoint(event.pos):
+                    binds_draw_hover = True
+                else:
+                    binds_draw_hover = False
+        
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if multiplayer_draw.collidepoint(event.pos) or multiplayer_rect.collidepoint(event.pos):
+                    multiplayer_active = True
+
+                if solo_draw.collidepoint(event.pos) or solo_rect.collidepoint(event.pos):
+                    solo_active = True
+
+
+
+        screen.fill(GRAY)
+
+        screen.blit(title_surf, title_rect)
+
+        pygame.draw.rect(screen, WHITE, multiplayer_box)
+        pygame.draw.rect(screen, BLACK, multiplayer_box, 3)
+        screen.blit(multiplayer_surf, multiplayer_rect)
+
+        pygame.draw.rect(screen, WHITE, solo_box)
+        pygame.draw.rect(screen, BLACK, solo_box, 3)
+        screen.blit(solo_surf, solo_rect)
+
+        pygame.draw.rect(screen, WHITE, binds_box)
+        pygame.draw.rect(screen, BLACK, binds_box, 3)
+        screen.blit(binds_surf, binds_rect)
+
+        if multiplayer_draw_hover:
+            pygame.draw.rect(screen, GREEN, multiplayer_box, 3)
+        
+        if solo_draw_hover:
+            pygame.draw.rect(screen, GREEN, solo_box, 3)
+        
+        if binds_draw_hover:
+            pygame.draw.rect(screen, GREEN, binds_box, 3)
+
+        pygame.display.update()
+        clock.tick(60)
+
+    return solo_active
+
 def countdown(seconds):
 
     countdown_font = pygame.font.Font("Z:\\1_Python\\Python_projekt-Pong-\\game_font.ttf", 70)
@@ -105,6 +192,7 @@ def name_input():
     player2_name_rect = player2_name_surf.get_rect(topright = (970, 30))
 
     while active:
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -145,8 +233,8 @@ def name_input():
 
         screen.fill(GRAY)
 
-        screen.blit(player1_name_surf, player1_name_rect)
         screen.blit(player2_name_surf, player2_name_rect)
+        screen.blit(player1_name_surf, player1_name_rect)
 
         pygame.draw.rect(screen, WHITE, input_box_p1)
         pygame.draw.rect(screen, BLACK, input_box_p1, 3)
@@ -158,7 +246,6 @@ def name_input():
         pygame.draw.rect(screen, BLACK, submit_box, 3)
 
         screen.blit(submit_surf, submit_rect)
-        
 
         if active_p1:
             pygame.draw.rect(screen, GREEN, input_box_p1, 3)
@@ -188,6 +275,8 @@ def name_input():
 
     return input_text_p1, input_text_p2
 
+game_mode = home()
+
 player1_name, player2_name = name_input()
 
 countdown(3)
@@ -198,7 +287,17 @@ while True:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-        
+        print(player2_rect)
+        if game_mode:
+            if ball_rect.centery > player2_rect.centery:
+                player2_rect.y += 5
+                if player2_rect.y > 600:
+                    player2_rect.y = 600
+            elif ball_rect.centery < player2_rect.centery:
+                player2_rect.y -= 5
+                if player2_rect.y < 0:
+                    player2_rect.y = 0
+
         screen.fill(GRAY)
 
         score_surf = font.render(f"{player1_name} {player1_score}:{player2_score} {player2_name}", True, BLACK, GRAY)
