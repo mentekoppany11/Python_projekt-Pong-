@@ -1,4 +1,5 @@
 import pygame
+from random import choice
 from sys import exit
 from time import sleep
 
@@ -43,13 +44,11 @@ ball_surf = pygame.Surface((20, 20))
 ball_surf.fill(ORANGE)
 ball_rect = ball_surf.get_rect(center = (500, 300))
 
-ball_speed_x = 6
-ball_speed_y = 6
+ball_speed_x = choice([6, -6])
+ball_speed_y = choice([6, -6])
 
 player1_score = 0
 player2_score = 0
-
-
 
 def countdown(seconds):
     for count in range(seconds, 0, -1):
@@ -174,6 +173,34 @@ def name_input():
 
         pygame.display.update()
         clock.tick(60)
+    
+    loading = True
+
+    while loading:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+        for count in range(3, 0, -1):
+
+            screen.fill(GRAY)
+
+            score_surf = font.render(f"{input_text_p1} {player1_score}:{player2_score} {input_text_p2}", False, BLACK, GRAY)
+            score_rect = score_surf.get_rect(midtop = (500, 25))
+            screen.blit(score_surf, score_rect)
+
+            countdown_surf = font.render(str(count), True, BLACK)
+            countdown_rect = countdown_surf.get_rect(center = (500, 300))
+            screen.blit(countdown_surf, countdown_rect)
+
+            pygame.display.update()
+            sleep(1)
+
+
+
+        
+
 
     return input_text_p1, input_text_p2
 
@@ -219,12 +246,7 @@ while True:
             ball_speed_y *= -1.05
             ball_speed_x *= 1.05
 
-        if ball_rect.left >= 1015:
-            ball_speed_x = 6
-            ball_speed_y = 6
-        #Labda sebességének a növelése
-            ball_speed_x *= -1.05 #labda irányának a meg fordítása
-            ball_speed_y *= 1.05
+        if ball_rect.left >= 1000:
         #Labda visszahelyezése középre
             ball_rect.x, ball_rect.y= 500, 300
         #Eredmény frissítése
@@ -232,11 +254,7 @@ while True:
         #Visszaszámláló
             countdown(3)
 
-        if ball_rect.right <= -15:
-            ball_speed_x, ball_speed_y = 6, 6
-        #Labda sebességének a növelése
-            ball_speed_x *= -1.05 #labda irányának a meg fordítása
-            ball_speed_y *= 1.05
+        if ball_rect.right <= 0:
         #Labda visszahelyezése középre
             ball_rect.x, ball_rect.y= 500, 300
         #Eredmény frissítése
@@ -245,7 +263,7 @@ while True:
             countdown(3)
 
         if player1_rect.colliderect(ball_rect) or player2_rect.colliderect(ball_rect):
-            ball_speed_x *= -1
+            ball_speed_x *= -1.05
 
         pygame.display.update()
         clock.tick(60)
