@@ -19,8 +19,8 @@ DARK_GREEN = (  0, 120,   0)
 
 pygame.display.set_caption("Pong")
 try:
-    icon_surf = pygame.image.load('icon.png')
-    font = pygame.font.Font("game_font.ttf")
+    icon_surf = pygame.image.load("Z:\\1_Python\\Python_projekt-Pong-\\icon.png")
+    font = pygame.font.Font("Z:\\1_Python\\Python_projekt-Pong-\\game_font.ttf")
 except FileNotFoundError as e:
     print(f"Fájl nem található/File not Found: {e}")
     font = pygame.font.Font(None, 30)
@@ -51,20 +51,32 @@ player1_score = 0
 player2_score = 0
 
 def countdown(seconds):
+
+    countdown_font = pygame.font.Font("Z:\\1_Python\\Python_projekt-Pong-\\game_font.ttf", 70)
+
     for count in range(seconds, 0, -1):
 
         screen.fill(GRAY)
 
-        score_surf = font.render(f"Player1 {player1_score}:{player2_score} Player2", False, BLACK, GRAY)
+        score_surf = font.render(f"{player1_name} {player1_score}:{player2_score} {player2_name}", True, BLACK)
         score_rect = score_surf.get_rect(midtop = (500, 25))
         screen.blit(score_surf, score_rect)
 
-        countdown_surf = font.render(f"Következő kör kezdődik: {count}", False, BLACK, GRAY)
+        countdown_surf = countdown_font.render(str(count), True, BLACK)
         countdown_rect = countdown_surf.get_rect(center = (500, 300))
         screen.blit(countdown_surf, countdown_rect)
 
         pygame.display.update()
         sleep(1)
+
+    screen.fill(GRAY)
+
+    countdown_surf = countdown_font.render("GO", True, BLACK)
+    countdown_rect = countdown_surf.get_rect(center = (500, 300))
+    screen.blit(countdown_surf, countdown_rect)
+
+    pygame.display.update()
+    sleep(1)
 
 def name_input():
 
@@ -173,38 +185,12 @@ def name_input():
 
         pygame.display.update()
         clock.tick(60)
-    
-    loading = True
-
-    while loading:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-
-        for count in range(3, 0, -1):
-
-            screen.fill(GRAY)
-
-            score_surf = font.render(f"{input_text_p1} {player1_score}:{player2_score} {input_text_p2}", False, BLACK, GRAY)
-            score_rect = score_surf.get_rect(midtop = (500, 25))
-            screen.blit(score_surf, score_rect)
-
-            countdown_surf = font.render(str(count), True, BLACK)
-            countdown_rect = countdown_surf.get_rect(center = (500, 300))
-            screen.blit(countdown_surf, countdown_rect)
-
-            pygame.display.update()
-            sleep(1)
-
-
-
-        
-
 
     return input_text_p1, input_text_p2
 
 player1_name, player2_name = name_input()
+
+countdown(3)
 
 while True:
     if player1_score != 3 and player2_score != 3:
@@ -247,26 +233,61 @@ while True:
             ball_speed_x *= 1.05
 
         if ball_rect.left >= 1000:
+            ball_speed_x = choice([6, -6])
+            ball_speed_y = choice([6, -6])
         #Labda visszahelyezése középre
-            ball_rect.x, ball_rect.y= 500, 300
+            ball_rect.x, ball_rect.y = 500, 300
         #Eredmény frissítése
             player1_score += 1
         #Visszaszámláló
-            countdown(3)
+            if player1_score != 3:
+                countdown(3)
 
         if ball_rect.right <= 0:
+            ball_speed_x = choice([6, -6])
+            ball_speed_y = choice([6, -6])
         #Labda visszahelyezése középre
-            ball_rect.x, ball_rect.y= 500, 300
+            ball_rect.x, ball_rect.y = 500, 300
         #Eredmény frissítése
             player2_score += 1
         #Visszaszámláló
-            countdown(3)
+            if player2_score != 3:
+                countdown(3)
 
         if player1_rect.colliderect(ball_rect) or player2_rect.colliderect(ball_rect):
             ball_speed_x *= -1.05
 
         pygame.display.update()
         clock.tick(60)
+
     else:
-        pygame.time.wait(5000)
+
+        winner_font = pygame.font.Font("Z:\\1_Python\\Python_projekt-Pong-\\game_font.ttf", 40)
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+            
+            screen.fill(GRAY)
+
+            if player1_score == 3:
+
+                winner_text_p1_surf = winner_font.render(f"WINNER {player1_name}", True, BLACK)
+                winner_text_p1_rect = winner_text_p1_surf.get_rect(center = (500, 300))
+                screen.blit(winner_text_p1_surf, winner_text_p1_rect)
+
+            if player2_score == 3:
+
+                winner_text_p2_surf = winner_font.render(f"WINNER {player2_name}", True, BLACK)
+                winner_text_p2_rect = winner_text_p2_surf.get_rect(center = (500, 300))
+                screen.blit(winner_text_p2_surf, winner_text_p2_rect)
+
+            pygame.display.update()
+            clock.tick(60)
+
+            pygame.time.wait(5000)
+            break
+
         break
