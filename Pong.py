@@ -534,9 +534,9 @@ while True:
             ball_speed_y = choice([5, -5])
             ball_rect.x = 500
             ball_rect.y = 300
-            player1_rect.x = 30
+            player1_rect.x = 50
             player1_rect.y = 200
-            player2_rect.x = 900
+            player2_rect.x = 920
             player2_rect.y = 200
             player1_score += 1
             if player1_score != 3:
@@ -547,9 +547,9 @@ while True:
             ball_speed_y = choice([5, -5])
             ball_rect.x = 500
             ball_rect.y = 300
-            player1_rect.x = 30
+            player1_rect.x = 50
             player1_rect.y = 200
-            player2_rect.x = 900
+            player2_rect.x = 920
             player2_rect.y = 200
             player2_score += 1
             if player2_score != 3:
