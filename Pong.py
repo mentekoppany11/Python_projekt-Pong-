@@ -71,18 +71,6 @@ def home():
     title_surf = title_font.render("PONG ARCADE GAME",True, BLACK)
     title_rect = title_surf.get_rect(center = (500, 100))
 
-    color_red_box_p1 = pygame.Rect(400, 360, 200, 40)
-    color_blue_box_p1 = pygame.Rect(400, 410, 200, 40)
-    color_green_box_p1 = pygame.Rect(400, 460, 200, 40)
-    color_yellow_box_p1 = pygame.Rect(400, 510, 200, 40)
-    color_purple_box_p1 = pygame.Rect(400, 560, 200, 40)
-
-    color_red_draw_hover_p1 = False
-    color_blue_draw_hover_p1 = False
-    color_green_draw_hover_p1 = False
-    color_yellow_draw_hover_p1 = False
-    color_purple_draw_hover_p1 = False
-
     while solo_active == False and multiplayer_active == False:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -104,7 +92,7 @@ def home():
                     binds_draw_hover = True
                 else:
                     binds_draw_hover = False
-        
+                    
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if multiplayer_draw.collidepoint(event.pos) or multiplayer_rect.collidepoint(event.pos):
                     multiplayer_active = True
@@ -112,39 +100,6 @@ def home():
                 if solo_draw.collidepoint(event.pos) or solo_rect.collidepoint(event.pos):
                     solo_active = True
 
-        mouse_pos = pygame.mouse.get_pos()
-
-        if color_red_box_p1.collidepoint(mouse_pos):
-            color_red_draw_hover_p1 = True
-        else:
-            color_red_draw_hover_p1 = False
-        pygame.draw.rect(screen, (255, 102, 102) if color_red_draw_hover_p1 else RED, color_red_box_p1)
-
-        if color_blue_box_p1.collidepoint(mouse_pos):
-        color_blue_draw_hover_p1 = True
-        else:
-            color_blue_draw_hover_p1 = False
-        pygame.draw.rect(screen, (102, 102, 255) if color_blue_draw_hover_p1 else BLUE, color_blue_box_p1)
-
-        if color_green_box_p1.collidepoint(mouse_pos):
-            color_green_draw_hover_p1 = True
-        else:
-            color_green_draw_hover_p1 = False
-        pygame.draw.rect(screen, (102, 255, 102) if color_green_draw_hover_p1 else GREEN, color_green_box_p1)
-
-        if color_yellow_box_p1.collidepoint(mouse_pos):
-            color_yellow_draw_hover_p1 = True
-        else:
-            color_yellow_draw_hover_p1 = False
-        pygame.draw.rect(screen, (255, 255, 102) if color_yellow_draw_hover_p1 else YELLOW, color_yellow_box_p1)
-
-        if color_purple_box_p1.collidepoint(mouse_pos):
-            color_purple_draw_hover_p1 = True
-        else:
-            color_purple_draw_hover_p1 = False
-        pygame.draw.rect(screen, (204, 102, 204) if color_purple_draw_hover_p1 else PURPLE, color_purple_box_p1)
-
-        
         screen.fill(GRAY)
 
         screen.blit(title_surf, title_rect)
@@ -573,7 +528,6 @@ while True:
         if ball_rect.top <= 0 or ball_rect.bottom >= 600:
             ball_speed_x = max(min(ball_speed_x *  1.01, max_speed), - max_speed)
             ball_speed_y = max(min(ball_speed_y * -1.01, max_speed), - max_speed)
-            print(ball_speed_x, ball_speed_y)
 
         if ball_rect.left >= 1000:
             ball_speed_x = choice([5, -5])
@@ -604,7 +558,6 @@ while True:
         if player1_rect.collidepoint(ball_rect.midleft) or player2_rect.collidepoint(ball_rect.midright):
                 ball_speed_x = max(min(ball_speed_x * -1.01, max_speed), -max_speed)
                 ball_speed_y = max(min(ball_speed_y * 1.01, max_speed), -max_speed)
-                
 
         pygame.display.update()
         clock.tick(60)
