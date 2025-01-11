@@ -184,8 +184,8 @@ def name_input():
     player2_name_surf = font.render("PLAYER 2", True, BLACK)
     player2_name_rect = player2_name_surf.get_rect(topright = (970, 30))
 
-    color_p1 = BLACK
-    color_p2 = BLACK
+    color_p1 = 'paddle_red.png'
+    color_p2 = 'paddle_blue.png'
 
     color_box_red_p1 = pygame.Rect(input_box_p1.left, input_box_p1.bottom + 10, 32, 32)
     color_box_red_active_p1 = True
@@ -234,26 +234,26 @@ def name_input():
                     active_p1 = False
 
                 if color_box_red_p1.collidepoint(event.pos):
-                    color_p1 = RED
-                elif color_box_green_p1.collidepoint(event.pos):
-                    color_p1 = DARK_GREEN
+                    color_p1 = 'paddle_red.png'
                 elif color_box_blue_p1.collidepoint(event.pos):
-                    color_p1 = BLUE
+                    color_p1 = 'paddle_blue.png'
+                elif color_box_green_p1.collidepoint(event.pos):
+                    color_p1 = 'paddle_green.png'
                 elif color_box_yellow_p1.collidepoint(event.pos):
-                    color_p1 = YELLOW
+                    color_p1 = 'paddle_yellow.png'
                 elif color_box_purple_p1.collidepoint(event.pos):
-                    color_p1 = PURPLE
+                    color_p1 = 'paddle_purple.png'
 
                 if color_box_red_p2.collidepoint(event.pos):
-                    color_p2 = RED
-                elif color_box_green_p2.collidepoint(event.pos):
-                    color_p2 = DARK_GREEN
+                    color_p2 = 'paddle_red.png'
                 elif color_box_blue_p2.collidepoint(event.pos):
-                    color_p2 = BLUE
+                    color_p2 = 'paddle_blue.png'
+                elif color_box_green_p2.collidepoint(event.pos):
+                    color_p2 = 'paddle_green.png'
                 elif color_box_yellow_p2.collidepoint(event.pos):
-                    color_p2 = YELLOW
+                    color_p2 = 'paddle_yellow.png'
                 elif color_box_purple_p2.collidepoint(event.pos):
-                    color_p2 = PURPLE
+                    color_p2 = 'paddle_purple.png'
 
             if event.type == pygame.KEYDOWN and len(input_text_p1) <= 14 and active_p1:
                 if event.key == pygame.K_BACKSPACE:
@@ -471,12 +471,10 @@ game_mode = home()
 
 player1_name, player2_name, color_p1, color_p2 = name_input()
 
-player1_surf = pygame.Surface((30, 200))
-player1_surf.fill(color_p1)
+player1_surf = pygame.image.load(color_p1).convert_alpha()
 player1_rect = player1_surf.get_rect(midleft = (50, 300))
 
-player2_surf = pygame.Surface((30, 200))
-player2_surf.fill(color_p2)
+player2_surf = pygame.image.load(color_p2).convert_alpha()
 player2_rect  = player2_surf.get_rect(midright = (950, 300))
 
 print(color_p1, color_p2)
@@ -549,7 +547,7 @@ while True:
             ball_rect.y = 300
             player1_rect.x = 50
             player1_rect.y = 200
-            player2_rect.x = 920
+            player2_rect.x = 9
             player2_rect.y = 200
             player2_score += 1
             if player2_score != 3:
