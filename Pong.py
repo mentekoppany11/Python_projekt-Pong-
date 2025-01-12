@@ -191,17 +191,17 @@ def name_input():
     color_box_red_p2 = pygame.Rect(input_box_p2.left, input_box_p1.bottom + 10, 32, 32)
     color_box_red_active_p2 = False
 
-    color_box_green_p1 = pygame.Rect(input_box_p1.left + 42, input_box_p1.bottom + 10, 32, 32)
-    color_box_green_active_p1 = False
-
-    color_box_green_p2 = pygame.Rect(input_box_p2.left + 42, input_box_p1.bottom + 10, 32, 32)
-    color_box_green_active_p2 = True
-
-    color_box_blue_p1 = pygame.Rect(input_box_p1.left + 84, input_box_p1.bottom + 10, 32, 32)
+    color_box_blue_p1 = pygame.Rect(input_box_p1.left + 42, input_box_p1.bottom + 10, 32, 32)
     color_box_blue_active_p1 = False
 
-    color_box_blue_p2 = pygame.Rect(input_box_p2.left + 84, input_box_p1.bottom + 10, 32, 32)
-    color_box_blue_active_p2 = False
+    color_box_blue_p2 = pygame.Rect(input_box_p2.left + 42, input_box_p1.bottom + 10, 32, 32)
+    color_box_blue_active_p2 = True
+
+    color_box_green_p1 = pygame.Rect(input_box_p1.left + 84, input_box_p1.bottom + 10, 32, 32)
+    color_box_green_active_p1 = False
+
+    color_box_green_p2 = pygame.Rect(input_box_p2.left + 84, input_box_p1.bottom + 10, 32, 32)
+    color_box_green_active_p2 = False
 
     color_box_yellow_p1 = pygame.Rect(input_box_p1.left + 126, input_box_p1.bottom + 10, 32, 32)
     color_box_yellow_active_p1 = False
@@ -475,14 +475,64 @@ player1_rect = player1_surf.get_rect(midleft = (50, 300))
 player2_surf = pygame.image.load(color_p2).convert_alpha()
 player2_rect  = player2_surf.get_rect(midright = (950, 300))
 
+replay_box = pygame.Rect(345, 510, 150, 40)
+replay_box_hover = False
+
+replay_surf = font.render("REPLAY", True, BLACK)
+replay_rect = replay_surf.get_rect(center = (420, 530))
+replay_draw = pygame.draw.rect(screen, DARK_GREEN, replay_box)
+replay = False
+
+end_box = pygame.Rect(505, 510, 150, 40)
+end_box_hover = False
+
+end_surf = font.render("QUIT GAME", True, BLACK)
+end_rect = end_surf.get_rect(center = (580, 530))
+end_draw = pygame.draw.rect(screen, DARK_GREEN, end_box)
+end = True
+
+
 countdown(3)
 
-while True:
-    if player1_score != 3 and player2_score != 3:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
+while end:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+
+        if event.type == pygame.MOUSEMOTION:
+            if replay_draw.collidepoint(event.pos) or replay_rect.collidepoint(event.pos):
+                replay_box_hover = True
+            else:
+                replay_box_hover = False
+
+            if end_draw.collidepoint(event.pos) or end_rect.collidepoint(event.pos):
+                end_box_hover = True
+            else:
+                end_box_hover = False
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if replay_draw.collidepoint(event.pos) or replay_rect.collidepoint(event.pos):
+                replay = True
+
+            if end_draw.collidepoint(event.pos) or end_rect.collidepoint(event.pos):
+                end = False
+
+    if replay:
+        player1_score = 0
+        player2_score = 0
+        ball_speed_x = choice([5, -5])
+        ball_speed_y = choice([5, -5])
+        ball_rect.x = 500
+        ball_rect.y = 300
+        player1_rect.x = 30
+        player1_rect.y = 200
+        player2_rect.x = 900
+        player2_rect.y = 200
+        replay = False
+        countdown(3)
+
+    if player1_score < 3 and player2_score < 3:
 
         if game_mode:
             if ball_rect.centery > player2_rect.centery and player2_rect.centery < 500:
@@ -510,10 +560,10 @@ while True:
         if keys[pygame.K_s] and player1_rect.centery < 500:
             player1_rect.y += 5
 
-        if keys[pygame.K_UP] and player2_rect.centery > 100:
+        if keys[pygame.K_UP] and player2_rect.centery > 100 and game_mode == False:
             player2_rect.y -= 5
 
-        if keys[pygame.K_DOWN] and player2_rect.centery < 500:
+        if keys[pygame.K_DOWN] and player2_rect.centery < 500 and game_mode == False:
             player2_rect.y += 5
 
         ball_rect.x += ball_speed_x
@@ -556,34 +606,41 @@ while True:
         pygame.display.update()
         clock.tick(60)
 
-    else:
+    elif player1_score == 3 or player2_score == 3:
 
         winner_font = pygame.font.Font("game_font.ttf", 40)
-
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    exit()
             
-            screen.fill(GRAY)
+        screen.fill(GRAY)
 
-            if player1_score == 3:
+        pygame.draw.rect(screen, DARK_GREEN, replay_box)
+        pygame.draw.rect(screen, BLACK, replay_box, 3)
+        screen.blit(replay_surf, replay_rect)
 
-                winner_text_p1_surf = winner_font.render(f"WINNER {player1_name}", True, BLACK)
-                winner_text_p1_rect = winner_text_p1_surf.get_rect(center = (500, 300))
-                screen.blit(winner_text_p1_surf, winner_text_p1_rect)
+        pygame.draw.rect(screen, DARK_GREEN, end_box)
+        pygame.draw.rect(screen, BLACK, end_box, 3)
+        screen.blit(end_surf, end_rect)
 
-            if player2_score == 3:
+        if player1_score == 3:
 
-                winner_text_p2_surf = winner_font.render(f"WINNER {player2_name}", True, BLACK)
-                winner_text_p2_rect = winner_text_p2_surf.get_rect(center = (500, 300))
-                screen.blit(winner_text_p2_surf, winner_text_p2_rect)
+            winner_text_p1_surf = winner_font.render(f"WINNER {player1_name}", True, BLACK)
+            winner_text_p1_rect = winner_text_p1_surf.get_rect(center = (500, 300))
+            screen.blit(winner_text_p1_surf, winner_text_p1_rect)
 
-            pygame.display.update()
-            clock.tick(60)
+        if player2_score == 3:
 
-            pygame.time.wait(5000)
-            break
+            winner_text_p2_surf = winner_font.render(f"WINNER {player2_name}", True, BLACK)
+            winner_text_p2_rect = winner_text_p2_surf.get_rect(center = (500, 300))
+            screen.blit(winner_text_p2_surf, winner_text_p2_rect)
 
-        break
+        if replay_box_hover:
+            pygame.draw.rect(screen, GREEN, replay_box)
+            pygame.draw.rect(screen, BLACK, replay_box, 3)
+            screen.blit(replay_surf, replay_rect)
+
+        if end_box_hover:
+            pygame.draw.rect(screen, GREEN, end_box)
+            pygame.draw.rect(screen, BLACK, end_box, 3)
+            screen.blit(end_surf, end_rect)
+
+        pygame.display.update()
+        clock.tick(60)
