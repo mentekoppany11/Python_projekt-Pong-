@@ -1,14 +1,20 @@
-- ütők vissza alap állásba
-- ujra kezdési lehetőség
+### Kész változások:
++ ütők vissza alap állásba pont után
++ újra kezdési lehetőség
++ neveket elkülöníteni az eredménytől
++ nevek a válsztott színben
 
+## Saját javaslatok:
+- kilépéskor főmenübe dobjon vissza
+- irányításról tájákoztatás
+- egy személysnél is, bal vagy jobb
+- meglehessen állítani a játékot
+- pont után álljon meg és addig ne induljon
 - szinek !=
-- nevek != 
+- nevek !=
+- score bar (50 px-xel nagyobb screen)
 
-
-
-
-- Az egyszemélyes játékhoz intelligens gépi ellenféllel,
-
-- Online többjátékos mód hozzáadásával,
-
-- Haladó játékmenethez bónuszokkal vagy különleges szabályokkal.
+# ChatGPT javaslatok:
+- Az egyszemélyes játékhoz intelligens gépi ellenféllel
+- Online többjátékos mód hozzáadásával
+- Haladó játékmenethez bónuszokkal vagy különleges szabályokkal

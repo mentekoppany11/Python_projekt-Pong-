@@ -136,10 +136,6 @@ def countdown(seconds):
 
         screen.fill(GRAY)
 
-        score_surf = font.render(f"{player1_name} {player1_score}:{player2_score} {player2_name}", True, BLACK)
-        score_rect = score_surf.get_rect(midtop = (500, 25))
-        screen.blit(score_surf, score_rect)
-
         countdown_surf = countdown_font.render(str(count), True, BLACK)
         countdown_rect = countdown_surf.get_rect(center = (500, 300))
         screen.blit(countdown_surf, countdown_rect)
@@ -184,6 +180,8 @@ def name_input():
 
     color_p1 = 'paddle_red.png'
     color_p2 = 'paddle_blue.png'
+    name_color_p1 = RED
+    name_color_p2 = BLUE
 
     color_box_red_p1 = pygame.Rect(input_box_p1.left, input_box_p1.bottom + 10, 32, 32)
     color_box_red_active_p1 = True
@@ -233,47 +231,35 @@ def name_input():
 
                 if color_box_red_p1.collidepoint(event.pos):
                     color_p1 = 'paddle_red.png'
+                    name_color_p1 = RED
                 elif color_box_blue_p1.collidepoint(event.pos):
                     color_p1 = 'paddle_blue.png'
+                    name_color_p1 = BLUE
                 elif color_box_green_p1.collidepoint(event.pos):
                     color_p1 = 'paddle_green.png'
+                    name_color_p1 = DARK_GREEN
                 elif color_box_yellow_p1.collidepoint(event.pos):
                     color_p1 = 'paddle_yellow.png'
+                    name_color_p1 = YELLOW
                 elif color_box_purple_p1.collidepoint(event.pos):
                     color_p1 = 'paddle_purple.png'
+                    name_color_p1 = PURPLE
 
                 if color_box_red_p2.collidepoint(event.pos):
                     color_p2 = 'paddle_red.png'
+                    name_color_p2 = RED
                 elif color_box_blue_p2.collidepoint(event.pos):
                     color_p2 = 'paddle_blue.png'
+                    name_color_p2 = BLUE
                 elif color_box_green_p2.collidepoint(event.pos):
                     color_p2 = 'paddle_green.png'
+                    name_color_p2 = GREEN
                 elif color_box_yellow_p2.collidepoint(event.pos):
                     color_p2 = 'paddle_yellow.png'
+                    name_color_p2 = YELLOW
                 elif color_box_purple_p2.collidepoint(event.pos):
                     color_p2 = 'paddle_purple.png'
-
-            if event.type == pygame.KEYDOWN and len(input_text_p1) <= 14 and active_p1:
-                if event.key == pygame.K_BACKSPACE:
-                    input_text_p1 = input_text_p1[:-1]
-                else:
-                    input_text_p1 += event.unicode
-                    
-            if event.type == pygame.KEYDOWN and len(input_text_p2) <= 14 and active_p2:
-                if event.key == pygame.K_BACKSPACE:
-                    input_text_p2 = input_text_p2[:-1]
-                else:
-                    input_text_p2 += event.unicode
-            
-            if event.type == pygame.MOUSEMOTION:
-                if submit_draw.collidepoint(event.pos) or submit_rect.collidepoint(event.pos):
-                    submit_box_hover = True
-                else:
-                    submit_box_hover = False 
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if submit_draw.collidepoint(event.pos) or submit_rect.collidepoint(event.pos):
-                    active = False
+                    name_color_p2 = PURPLE
 
                 if color_box_red_p1.collidepoint(event.pos):
                     color_box_red_active_p1 = not color_box_red_active_p1
@@ -344,6 +330,27 @@ def name_input():
                     color_box_green_active_p2 = False
                     color_box_blue_active_p2 = False
                     color_box_yellow_active_p2 = False
+
+                if submit_draw.collidepoint(event.pos) or submit_rect.collidepoint(event.pos):
+                    active = False
+
+            if event.type == pygame.KEYDOWN and len(input_text_p1) <= 14 and active_p1:
+                if event.key == pygame.K_BACKSPACE:
+                    input_text_p1 = input_text_p1[:-1]
+                else:
+                    input_text_p1 += event.unicode
+                    
+            if event.type == pygame.KEYDOWN and len(input_text_p2) <= 14 and active_p2:
+                if event.key == pygame.K_BACKSPACE:
+                    input_text_p2 = input_text_p2[:-1]
+                else:
+                    input_text_p2 += event.unicode
+            
+            if event.type == pygame.MOUSEMOTION:
+                if submit_draw.collidepoint(event.pos) or submit_rect.collidepoint(event.pos):
+                    submit_box_hover = True
+                else:
+                    submit_box_hover = False 
 
         screen.fill(GRAY)
 
@@ -463,17 +470,21 @@ def name_input():
     if input_text_p2 == "":
         input_text_p2 = "PLAYER2"
 
-    return input_text_p1, input_text_p2, color_p1, color_p2
+    return input_text_p1, input_text_p2, color_p1, color_p2, name_color_p1, name_color_p2
 
 game_mode = home()
 
-player1_name, player2_name, color_p1, color_p2 = name_input()
+player1_name, player2_name, color_p1, color_p2, name_color_p1, name_color_p2 = name_input()
 
 player1_surf = pygame.image.load(color_p1).convert_alpha()
 player1_rect = player1_surf.get_rect(midleft = (50, 300))
+player1_name_surf = font.render(f"{player1_name}", True, name_color_p1)
+player1_name_rect = player1_name_surf.get_rect(topleft = (100, 25))
 
 player2_surf = pygame.image.load(color_p2).convert_alpha()
 player2_rect  = player2_surf.get_rect(midright = (950, 300))
+player2_name_surf = font.render(f"{player2_name}", True, name_color_p2)
+player2_name_rect = player2_name_surf.get_rect(topright = (900, 25))
 
 replay_box = pygame.Rect(345, 510, 150, 40)
 replay_box_hover = False
@@ -542,13 +553,18 @@ while end:
 
         screen.fill(GRAY)
 
-        score_surf = font.render(f"{player1_name} {player1_score}:{player2_score} {player2_name}", True, BLACK, GRAY)
+        
+
+        score_surf = font.render(f"{player1_score}:{player2_score}", True, BLACK)
         score_rect = score_surf.get_rect(midtop = (500, 25))
 
         screen.blit(player1_surf, player1_rect)
         screen.blit(player2_surf, player2_rect)
 
         screen.blit(score_surf, score_rect)
+
+        screen.blit(player1_name_surf, player1_name_rect)
+        screen.blit(player2_name_surf, player2_name_rect)
 
         screen.blit(ball_surf, ball_rect)
 
@@ -578,9 +594,9 @@ while end:
             ball_speed_y = choice([5, -5])
             ball_rect.x = 500
             ball_rect.y = 300
-            player1_rect.x = 30
+            player1_rect.x = 50
             player1_rect.y = 200
-            player2_rect.x = 900
+            player2_rect.x = 920
             player2_rect.y = 200
             player1_score += 1
             if player1_score != 3:
@@ -591,9 +607,9 @@ while end:
             ball_speed_y = choice([5, -5])
             ball_rect.x = 500
             ball_rect.y = 300
-            player1_rect.x = 30
+            player1_rect.x = 50
             player1_rect.y = 200
-            player2_rect.x = 900
+            player2_rect.x = 920
             player2_rect.y = 200
             player2_score += 1
             if player2_score != 3:
