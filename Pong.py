@@ -21,7 +21,7 @@ BLACK      = (  0,   0,   0)
 
 pygame.display.set_caption("Pong")
 try:
-    icon_surf = pygame.image.load("icon.png")
+    icon_surf = pygame.image.load("icon.png").convert_alpha()
     font = pygame.font.Font("game_font.ttf")
 except FileNotFoundError as e:
     print(f"Fájl nem található/File not Found: {e}")
@@ -29,13 +29,11 @@ except FileNotFoundError as e:
     icon_surf = pygame.Surface((32,32))
     icon_surf.fill(RED)
 
-
 pygame.display.set_icon(icon_surf)
 
 clock = pygame.time.Clock()
 
-ball_surf = pygame.Surface((20, 20))
-ball_surf.fill(ORANGE)
+ball_surf = pygame.image.load('ball.png').convert_alpha()
 ball_rect = ball_surf.get_rect(center = (500, 300))
 
 ball_speed_x = choice([5, -5])
@@ -477,8 +475,6 @@ player1_rect = player1_surf.get_rect(midleft = (50, 300))
 player2_surf = pygame.image.load(color_p2).convert_alpha()
 player2_rect  = player2_surf.get_rect(midright = (950, 300))
 
-print(color_p1, color_p2)
-
 countdown(3)
 
 while True:
@@ -532,9 +528,9 @@ while True:
             ball_speed_y = choice([5, -5])
             ball_rect.x = 500
             ball_rect.y = 300
-            player1_rect.x = 50
+            player1_rect.x = 30
             player1_rect.y = 200
-            player2_rect.x = 920
+            player2_rect.x = 900
             player2_rect.y = 200
             player1_score += 1
             if player1_score != 3:
@@ -545,9 +541,9 @@ while True:
             ball_speed_y = choice([5, -5])
             ball_rect.x = 500
             ball_rect.y = 300
-            player1_rect.x = 50
+            player1_rect.x = 30
             player1_rect.y = 200
-            player2_rect.x = 9
+            player2_rect.x = 900
             player2_rect.y = 200
             player2_score += 1
             if player2_score != 3:
