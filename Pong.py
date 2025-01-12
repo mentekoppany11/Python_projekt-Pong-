@@ -245,6 +245,7 @@ def name_input():
                     color_p1 = 'paddle_purple.png'
                     name_color_p1 = PURPLE
 
+
                 if color_box_red_p2.collidepoint(event.pos):
                     color_p2 = 'paddle_red.png'
                     name_color_p2 = RED
@@ -252,8 +253,8 @@ def name_input():
                     color_p2 = 'paddle_blue.png'
                     name_color_p2 = BLUE
                 elif color_box_green_p2.collidepoint(event.pos):
-                    color_p2 = 'paddle_green.png'
-                    name_color_p2 = GREEN
+                    color_p2 = 'paddle_dark_green.png'
+                    name_color_p2 = DARK_GREEN
                 elif color_box_yellow_p2.collidepoint(event.pos):
                     color_p2 = 'paddle_yellow.png'
                     name_color_p2 = YELLOW
@@ -329,7 +330,7 @@ def name_input():
                     color_box_red_active_p2 = False
                     color_box_green_active_p2 = False
                     color_box_blue_active_p2 = False
-                    color_box_yellow_active_p2 = False
+                    color_box_yellow_active_p2 = False      
 
                 if submit_draw.collidepoint(event.pos) or submit_rect.collidepoint(event.pos):
                     active = False
@@ -351,6 +352,9 @@ def name_input():
                     submit_box_hover = True
                 else:
                     submit_box_hover = False 
+
+
+
 
         screen.fill(GRAY)
 
@@ -536,7 +540,7 @@ while end:
         ball_speed_y = choice([5, -5])
         ball_rect.x = 500
         ball_rect.y = 300
-        player1_rect.x = 30
+        player1_rect.x = 50
         player1_rect.y = 200
         player2_rect.x = 900
         player2_rect.y = 200
@@ -553,19 +557,21 @@ while end:
 
         screen.fill(GRAY)
 
-        
-
         score_surf = font.render(f"{player1_score}:{player2_score}", True, BLACK)
         score_rect = score_surf.get_rect(midtop = (500, 25))
 
+        #ütők megjelenítése
         screen.blit(player1_surf, player1_rect)
         screen.blit(player2_surf, player2_rect)
 
+        #eredmény megjelenítése
         screen.blit(score_surf, score_rect)
 
+        #játékos nevek megjelenítése
         screen.blit(player1_name_surf, player1_name_rect)
         screen.blit(player2_name_surf, player2_name_rect)
 
+        #labda megjelenítése
         screen.blit(ball_surf, ball_rect)
 
         keys = pygame.key.get_pressed()
